@@ -4,7 +4,20 @@ import Redis from "ioredis";
 const app = express();
 app.use(express.json());
 
+// const redis = new Redis(process.env.Redis_URL || "redis://localhost:6379");
 const redis = new Redis(process.env.Redis_URL || "redis://localhost:6379");
+
+redis.on("connect", () => {
+    console.log("Redis connected successfully");
+});
+
+redis.on("ready", () => {
+    console.log("Redis is ready");
+});
+
+redis.on("error", (err) => {
+    console.error("Redis error:", err);
+});
 
 function otpKey(phone) {
     return `otp:${phone}`;
